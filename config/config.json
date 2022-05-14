@@ -1,0 +1,6 @@
+{
+    "train_messages": "https://trafik.emilfolino.se/messages",
+    "train_stations": "https://trafik.emilfolino.se/stations",
+    "train_codes": "https://trafik.emilfolino.se/codes",
+    "train_delays": "https://trafik.emilfolino.se/delayed"
+}
