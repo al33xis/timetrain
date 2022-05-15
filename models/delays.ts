@@ -5,7 +5,7 @@ const delays = {
     const response = await fetch(`${config.train_delays}`);
     const result = await response.json();
 
-    return result.data;
+    return await result.data;
     }
 }
 

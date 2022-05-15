@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -19,10 +20,14 @@ const routeIcons = {
 
 
 export default function App() {
+    // const [messages, setMessages] = useState();
+    // const [stations, setStations] = useState();
+    // const [codes, setCodes] = useState();
+    // const [delays, setDelays] = useState();
 
-    // states
 
-  return (
+
+    return (
     <SafeAreaView style={Base.app_base}>
         <NavigationContainer>
             <Tab.Navigator screenOptions={({route}) => ({
@@ -37,6 +42,18 @@ export default function App() {
                 <Tab.Screen name="Hem">
                     {() => <Home />}
                 </Tab.Screen>
+                {/* <Tab.Screen name="Förseningar">
+                    {() => <Delays 
+                    messages={messages}
+                    setMessages={setMessages}
+                    stations={stations}
+                    setStations={setStations}
+                    codes={codes}
+                    setCodes={setCodes}
+                    delays={delays}
+                    setDelays={setDelays}
+                    />}
+                </Tab.Screen> */}
                 <Tab.Screen name="Förseningar">
                     {() => <Delays />}
                 </Tab.Screen>
