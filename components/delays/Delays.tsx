@@ -13,15 +13,16 @@ export default function Delays() {
 
 
     return (
-        <Stack.Navigator initialRouteName="Karta">
-            {/* <Stack.Screen name="Karta">
-                {(screenProps) => <DelayMap {...screenProps} 
-                stations={props.stations}
-                setStations={props.setStations}
-                delays={props.delays}
-                setDelays={props.setDelays}
-                />}
-            </Stack.Screen> */}
+        <Stack.Navigator initialRouteName="Karta" screenOptions={{
+            headerStyle: {
+            backgroundColor: "#f4511e",
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            fontWeight: 'bold',
+        },
+        headerTitleAlign: 'center'
+        }}>
             <Stack.Screen name="Karta">
                 {() => <DelayMap 
                 stations={stations}

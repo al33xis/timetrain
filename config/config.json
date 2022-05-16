@@ -2,5 +2,7 @@
     "train_messages": "https://trafik.emilfolino.se/messages",
     "train_stations": "https://trafik.emilfolino.se/stations",
     "train_codes": "https://trafik.emilfolino.se/codes",
-    "train_delays": "https://trafik.emilfolino.se/delayed"
+    "train_delays": "https://trafik.emilfolino.se/delayed",
+    "api_key": "8e45177f3b2f3803a17705ce164bcf5d",
+    "base_url": "https://auth.emilfolino.se"
 }
