@@ -71,7 +71,7 @@ export default function App() {
                 </Tab.Screen>
                 {isLoggedIn ? 
                 <Tab.Screen name="Favoriter">
-                    {() => <Favourite setIsLoggedIn={setIsLoggedIn}/>}
+                    {() => <Favourite setIsLoggedIn={setIsLoggedIn} />}
                 </Tab.Screen> :
                 <Tab.Screen name="Logga in">
                     {() => <Auth setIsLoggedIn={setIsLoggedIn} />}

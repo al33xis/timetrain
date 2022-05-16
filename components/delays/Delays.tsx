@@ -33,4 +33,13 @@ export default function Delays() {
             </Stack.Screen>
         </Stack.Navigator>
     );
+
+    // return (
+    //     <DelayMap
+    //         stations={stations}
+    //         setStations={setStations}
+    //         delays={delays}
+    //         setDelays={setDelays}
+    //     />
+    // );
 };
