@@ -23,6 +23,8 @@ export default function DelayMap({messages, setMessages, stations, setStations,
     const [modalVisible, setModalVisible] = useState(false);
     const [currentStation, setCurrentStation] = useState([]);
 
+    const [testView, setTestView] = useState(false);
+
     useEffect(() => {
         (async () => {
             setDelays(await delayModel.getDelays());
@@ -68,40 +70,23 @@ export default function DelayMap({messages, setMessages, stations, setStations,
     
     const delayListObject = createDelayList();
     const delayList = delayListObject.map((station, index) => {
-        
-        // console.log(station);
-        
-        // // Dessa ska nog till ModalList
-        // const new_time = new Date(station.estimated);
-        // let hours = String(new_time.getHours());
-        // let minutes = String(new_time.getHours());
-        // let seconds = String(new_time.getSeconds());
-        
-        // if (parseInt(hours) < 10) {
-        //     hours = `0${hours}`;
-        // }
-        // if (parseInt(minutes) < 10) {
-        //     minutes = `0${minutes}`;
-        // }
-        // if (parseInt(seconds) < 10) {
-        //     seconds = `0${seconds}`;
-        // }
-        
         return <Marker 
         key={index}
         coordinate={{latitude: station.latitude, longitude: station.longitude}}
         title={station.station}
         // description={`Tåg ${station.train} - ny avgångstid ${hours}:${minutes}:${seconds}`}
         description={`Förväntade tågförseningar, klicka här för mer information!`}
-        onCalloutPress={() => {
-            setModalVisible(!modalVisible);
+        onPress={() => {
+            setTestView(true);
             setCurrentStation([station.acronym, station.station]);
         }}
+        // onCalloutPress={() => {
+        //     setModalVisible(!modalVisible);
+        //     setCurrentStation([station.acronym, station.station]);
+        // }}
         />
     });
-    
-    // kan använda filter för att filtrera JSON-objekten för att underlätta för flera stationer, se ShipList rad 24
-    // kan nog annars använda markers onPress som visar modal direkt när man klickar på pin?
+
     function ModalList() {
         // hämta alla tåg via akronym
         const acr = currentStation[0];
@@ -116,28 +101,16 @@ export default function DelayMap({messages, setMessages, stations, setStations,
             }
         }
 
-        console.log(allTrains);
+        // console.log(allTrains);
 
         const returnObj = allTrains.map((station, index) => {
             // Behöver splita tiden för verkar inte fungera att parsa och konvertera till nytt datum
             const split_date = station[1].split('T');
-            console.log(split_date);
+            // console.log(split_date);
             var time = split_date[1].split('.');
             time = time[0];
-            console.log(time);
+            // console.log(time);
 
-
-
-
-            // if (parseInt(hours) < 10) {
-            //     hours = `0${hours}`;
-            // }
-            // if (parseInt(minutes) < 10) {
-            //     minutes = `0${minutes}`;
-            // }
-            // if (parseInt(seconds) < 10) {
-            //     seconds = `0${seconds}`;
-            // }
             return <Text key={index}>
                     Tåg {station[0]} - ny avgångstid {time}.
                     </Text>
@@ -146,7 +119,30 @@ export default function DelayMap({messages, setMessages, stations, setStations,
         return returnObj;
     }
     
-    
+    function TrainView() {
+        let trainObject;
+
+        if (testView) {
+
+            trainObject = <View style={{height: 200}}>
+                            <Text>Aktiv</Text>
+                            <Text>{currentStation[0]}</Text>
+                            {/* lägg in en komponent här?? så som returnObj */}
+                            <Button
+                            title='Tryck'
+                            onPress={() => {
+                                setTestView(!testView);
+                            }}
+                            />
+                        </View>
+            console.log("tryckte på pin");
+        } else {
+            // Returnerar en tom view
+            trainObject = <View></View>;
+            // console.log("ej tryckt på pin");
+        }
+        return trainObject;
+    }
     
     return (
         <View style={style.container_map}>
@@ -181,6 +177,7 @@ export default function DelayMap({messages, setMessages, stations, setStations,
             >
             {delayList}
             </MapView>
+            <TrainView />
         </View>
   );
 }
