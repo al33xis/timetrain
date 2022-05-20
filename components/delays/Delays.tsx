@@ -7,7 +7,8 @@ import DelayMap from "./DelayMap";
 const Stack = createNativeStackNavigator();
 
 // export default function Delays(props) {
-export default function Delays({delays, setDelays, stations, setStations}) {
+export default function Delays(props) {
+// export default function Delays({delays, setDelays, stations, setStations}) {
     // const [delays, setDelays] = useState([]);
     // const [stations, setStations] = useState([]);
 
@@ -24,11 +25,12 @@ export default function Delays({delays, setDelays, stations, setStations}) {
         headerTitleAlign: 'center'
         }}>
             <Stack.Screen name="Karta">
-                {() => <DelayMap 
-                stations={stations}
-                setStations={setStations}
-                delays={delays}
-                setDelays={setDelays}
+                {(screenProps) => <DelayMap 
+                {...screenProps}
+                stations={props.stations}
+                setStations={props.setStations}
+                delays={props.delays}
+                setDelays={props.setDelays}
                 />}
             </Stack.Screen>
         </Stack.Navigator>
