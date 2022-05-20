@@ -7,9 +7,9 @@ import DelayMap from "./DelayMap";
 const Stack = createNativeStackNavigator();
 
 // export default function Delays(props) {
-export default function Delays() {
-    const [delays, setDelays] = useState([]);
-    const [stations, setStations] = useState([]);
+export default function Delays({delays, setDelays, stations, setStations}) {
+    // const [delays, setDelays] = useState([]);
+    // const [stations, setStations] = useState([]);
 
 
     return (
