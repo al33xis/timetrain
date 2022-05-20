@@ -14,6 +14,8 @@ import Favourite from './components/favourite/Favourite';
 import { Base } from './styles';
 
 import authModel from "./models/auth";
+import delayModel from "./models/delays";
+import stationModel from "./models/stations";
 
 const Tab = createBottomTabNavigator();
 const routeIcons = {
@@ -23,20 +25,30 @@ const routeIcons = {
   "Logga in": "lock-closed"
 };
 
+// importera färger från en style-fil så att man ändrar på ett ställe!!
 
 export default function App() {
     // const [messages, setMessages] = useState();
-    // const [stations, setStations] = useState();
+    const [stations, setStations] = useState();
     // const [codes, setCodes] = useState();
-    // const [delays, setDelays] = useState();
-
-    // importera färger från en style-fil så att man ändrar på ett ställe!!
-
+    const [delays, setDelays] = useState();
     const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
 
     useEffect(() => {
         (async () => {
         setIsLoggedIn(await authModel.loggedIn());
+        })();
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            setDelays(await delayModel.getDelays());
+        })();
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            setStations(await stationModel.getStations());
         })();
     }, []);
 
@@ -67,11 +79,11 @@ export default function App() {
                     {() => <Home />}
                 </Tab.Screen>
                 <Tab.Screen name="Förseningar">
-                    {() => <Delays />}
+                    {() => <Delays stations={stations} setStations={setStations} delays={delays} setDelays={setDelays}/>}
                 </Tab.Screen>
                 {isLoggedIn ? 
                 <Tab.Screen name="Favoriter">
-                    {() => <Favourite setIsLoggedIn={setIsLoggedIn} />}
+                    {() => <Favourite setIsLoggedIn={setIsLoggedIn} stations={stations} delays={delays}/>}
                 </Tab.Screen> :
                 <Tab.Screen name="Logga in">
                     {() => <Auth setIsLoggedIn={setIsLoggedIn} />}
