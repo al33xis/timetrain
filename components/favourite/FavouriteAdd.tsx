@@ -24,14 +24,6 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
     const [searchedStation, setSearchedStation] = useState([]);
     const [selectedStation, setSelectedStation] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
-    // const [favouriteStation, setFavouriteStation] = useState([]);
-
-
-    // useEffect(() => {
-    //     (async () => {
-    //         setFavouriteStation(await stationModel.getFavouriteStation());
-    //     })();
-    // }, []);
 
 
     // Funktion som skapar listan i en state
@@ -68,58 +60,6 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
         setFavouriteStation(await stationModel.getFavouriteStation());
 
     }
-
-
-    // Skapar en lista som jag sedan gör en map på
-    function getFavourite() {
-        const favourite_list = [];
-
-        for (let i = 0; i < delays.length; i++) {
-            const tmp_delay = delays[i].FromLocation;
-            
-            
-            if (tmp_delay !== undefined) {
-                
-                const train = delays[i].AdvertisedTrainIdent;
-                const estimated_time = delays[i].EstimatedTimeAtLocation;
-                const from_location = delays[i].FromLocation[0].LocationName;
-
-                for (let j = 0; j < favouriteStation.length; j++) {
-                    
-                    const tmp_fav = favouriteStation[j].artefact;
-
-                    if (tmp_fav === from_location) {
-
-                        favourite_list.push({acronym: tmp_fav, train: train, estimated: estimated_time})
-                    }
-                }
-            }
-        }
-
-        return favourite_list;
-    }
-
-    // ModalList i DelayMap löser "problemet" med flera rubriker, vill bara ha en för varje station
-    const favouriteViewObject = getFavourite();
-    const favouriteView = favouriteViewObject.map((station, index) => {
-        console.log(station);
-        const split_time = station.estimated.split('T');
-        var time = split_time[1].split('.');
-        time = time[0];
-
-        const acronym = station.acronym;
-        const train = station.train;
-        var station_name;
-
-        for (let i = 0; i < stations.length; i++) {
-            if (stations[i].LocationSignature === acronym) {
-                station_name = stations[i].AdvertisedLocationName;
-            }
-        }
-
-        return <View key={index} style={{borderWidth: 2}}><Text>{station_name}</Text></View>
-    })
-
 
 
     // Ritar ut söklistan

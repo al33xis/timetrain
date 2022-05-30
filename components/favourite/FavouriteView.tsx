@@ -11,7 +11,8 @@ const Stack = createNativeStackNavigator();
 
 
 
-// En vy som visar nuvarande favoriter och en knapp att radera dessa -> under sökfunktionen
+// Ska jag visa alla Favoritstationer och de som inte har någon försening skrivs ut för? <- smartare//snyggare? "Woho - inga förseningar!"
+// Extern funktion som summerar förseningarna per station?
 // Funktion som raderar favoriter
 
 // alexis@alexis.se
@@ -56,26 +57,60 @@ export default function FavouriteView({setIsLoggedIn, stations, delays, favourit
         return favourite_list;
     }
 
-    // ModalList i DelayMap löser "problemet" med flera rubriker, vill bara ha en för varje station
-    const favouriteViewObject = getFavourite();
-    const favouriteView = favouriteViewObject.map((station, index) => {
-        console.log(station);
-        const split_time = station.estimated.split('T');
-        var time = split_time[1].split('.');
-        time = time[0];
+    function FavouriteViewFunc() {
+        var all_trains = [];
 
-        const acronym = station.acronym;
-        const train = station.train;
-        var station_name;
+        for (let i = 0; i < favouriteStation.length; i++) {
+            // console.log(favouriteStation[i].artefact);
+            const current_station = favouriteStation[i].artefact;
 
-        for (let i = 0; i < stations.length; i++) {
-            if (stations[i].LocationSignature === acronym) {
-                station_name = stations[i].AdvertisedLocationName;
+            for (let j = 0; j < delays.length; j++) {
+                if (delays[j].FromLocation !== undefined && delays[j].FromLocation[0].LocationName === current_station) {
+
+                    const train = delays[j].AdvertisedTrainIdent;
+                    const advertised_time = delays[j].AdvertisedTimeAtLocation;
+                    const estimated_time = delays[j].EstimatedTimeAtLocation;
+
+                    all_trains.push([current_station, train, advertised_time, estimated_time]);
+                }
             }
+            // lägg nedan kod här??? så returnerar den mellan varje stationsbyte??
         }
 
-        return <View key={index} style={{borderWidth: 2}}><Text>{station_name}</Text></View>
-    })
+        var station_name: any;
+
+        const returnObj = all_trains.map((station, index) => {
+            const ad_time_split = station[2].split('T');
+            var ad_time = ad_time_split[1].split('.');
+            ad_time = ad_time[0];
+            
+            const est_time_split = station[3].split('T');
+            var est_time = est_time_split[1].split('.');
+            est_time = est_time[0];
+
+            const cur_station = station[0];
+            const cur_train = station[1];
+
+            for (let i = 0; i < stations.length; i++) {
+                if (stations[i].LocationSignature === cur_station) {
+                    station_name = stations[i].AdvertisedLocationName;
+                }
+            }
+
+            return <View key={index}>
+            <Text>{station_name}</Text>
+            <Text>{cur_train}</Text>
+            <Text>{ad_time}</Text>
+            <Text>{est_time}</Text>
+            </View>
+        })
+
+        return returnObj;
+
+            
+
+        // kör en map på listan och skriv ut resultatet
+    }
 
 
     // async function deleteFavourite() {
@@ -87,7 +122,7 @@ export default function FavouriteView({setIsLoggedIn, stations, delays, favourit
         <View>
             <Text>Favoriter:</Text>
             <ScrollView style={{height: 200}}>
-            {favouriteView}
+            <FavouriteViewFunc />
             </ScrollView>
             <View style={{margin: 20}}>
             <Button 

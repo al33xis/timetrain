@@ -33,7 +33,7 @@ export default function Favourite(props) {
         },
         headerTitleAlign: 'center'
         }}>
-            <Stack.Screen name="Mina favoriter">
+            <Stack.Screen name="Mina favoriter" options={{header: () => null}}>
                 {(screenProps) => <FavouriteView
                 {...screenProps}
                 setIsLoggedIn={props.setIsLoggedIn}
