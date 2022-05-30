@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FlashMessage from "react-native-flash-message";
+import { Pressable } from 'react-native';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 import Home from './components/home/Home';
 import Delays from './components/delays/Delays';
@@ -22,10 +24,11 @@ const routeIcons = {
   "Hem": "home",
   "Förseningar": "time",
   "Favoriter": "star",
-  "Logga in": "lock-closed"
+  "Mina sidor": "lock-closed"
 };
 
 // importera färger från en style-fil så att man ändrar på ett ställe!!
+// Lösning för att uppdatera kartan manuellt eller när man trycker på tab navigatorn
 
 export default function App() {
     // const [messages, setMessages] = useState();
@@ -34,6 +37,16 @@ export default function App() {
     const [delays, setDelays] = useState();
     const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
 
+
+    async function reloadDelays() {
+        setDelays(await delayModel.getDelays());
+    }
+
+    async function logOut() {
+        authModel.logout();
+        setIsLoggedIn(false);
+    }
+
     useEffect(() => {
         (async () => {
         setIsLoggedIn(await authModel.loggedIn());
@@ -41,9 +54,7 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-        (async () => {
-            setDelays(await delayModel.getDelays());
-        })();
+        reloadDelays();
     }, []);
 
     useEffect(() => {
@@ -61,31 +72,52 @@ export default function App() {
 
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: "tomato",
+                tabBarActiveTintColor: "#00A438",
                 tabBarInactiveTintColor: "gray",
                 tabBarStyle: {
-                    backgroundColor: '#000',
+                    backgroundColor: '#FFF',
                 },
                 headerStyle: {
-                    backgroundColor: "#f4511e",
+                    backgroundColor: "#F4F4ED",
+                    height: 80,
                 },
-                headerTintColor: '#fff',
+                headerTintColor: '#000',
                 headerTitleStyle: {
                     fontWeight: 'bold',
                 },
-                headerTitleAlign: 'center'
+                headerTitleAlign: 'center',
                 })}>
                 <Tab.Screen name="Hem">
                     {() => <Home />}
                 </Tab.Screen>
-                <Tab.Screen name="Förseningar">
+                <Tab.Screen name="Förseningar" 
+                options={{headerRight: () => (
+                    <Pressable 
+                    onPress={() => {
+                        reloadDelays();
+                        showMessage({
+                            message: "Kartan har uppdaterats",
+                            type: "success",
+                            floating: true
+                        })
+                    }}>
+                    <Ionicons name="refresh" color={"#000"} size={30} style={{marginRight: 20}}/>
+                    </Pressable>
+                )}}>
                     {() => <Delays stations={stations} setStations={setStations} delays={delays} setDelays={setDelays}/>}
                 </Tab.Screen>
                 {isLoggedIn ? 
-                <Tab.Screen name="Favoriter">
+                <Tab.Screen name="Favoriter" options={{headerRight: () => (
+                    <Pressable 
+                    onPress={() => {
+                        logOut();
+                    }}>
+                    <Ionicons name="log-out-outline" color={"#000"} size={30} style={{marginRight: 20}}/>
+                    </Pressable>
+                )}}>
                     {() => <Favourite setIsLoggedIn={setIsLoggedIn} stations={stations} delays={delays}/>}
                 </Tab.Screen> :
-                <Tab.Screen name="Logga in">
+                <Tab.Screen name="Mina sidor">
                     {() => <Auth setIsLoggedIn={setIsLoggedIn} />}
                 </Tab.Screen>}
             </Tab.Navigator>
