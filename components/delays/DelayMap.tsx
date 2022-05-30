@@ -15,6 +15,9 @@ import delayModel from "../../models/delays";
 
 
 
+// Egen position saknas än så länge
+
+
 export default function DelayMap({stations, setStations, delays, setDelays})
 {
     const [currentStation, setCurrentStation] = useState([]);
