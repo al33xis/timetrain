@@ -1,17 +1,13 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useState, useEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 
 
 import DelayMap from "./DelayMap";
 
 const Stack = createNativeStackNavigator();
 
-// export default function Delays(props) {
 export default function Delays(props) {
-// export default function Delays({delays, setDelays, stations, setStations}) {
-    // const [delays, setDelays] = useState([]);
-    // const [stations, setStations] = useState([]);
-
 
     return (
         <Stack.Navigator initialRouteName="Karta" screenOptions={{
@@ -22,7 +18,8 @@ export default function Delays(props) {
         headerTitleStyle: {
             fontWeight: 'bold',
         },
-        headerTitleAlign: 'center'
+        headerTitleAlign: 'center',
+        headerShown: false,
         }}>
             <Stack.Screen name="Karta">
                 {(screenProps) => <DelayMap 
@@ -35,13 +32,4 @@ export default function Delays(props) {
             </Stack.Screen>
         </Stack.Navigator>
     );
-
-    // return (
-    //     <DelayMap
-    //         stations={stations}
-    //         setStations={setStations}
-    //         delays={delays}
-    //         setDelays={setDelays}
-    //     />
-    // );
 };
