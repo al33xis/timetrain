@@ -1,5 +1,5 @@
-import { Image, Text, View, ScrollView, Modal, Button } from 'react-native';
-import { useState, useEffect } from 'react';
+import { Image, Text, View, ScrollView, Modal, Button , Pressable} from 'react-native';
+import { useState, useEffect, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 
 import MapView from "react-native-maps";
@@ -15,14 +15,17 @@ import delayModel from "../../models/delays";
 
 
 
-// Egen position saknas än så länge
-
-
 export default function DelayMap({stations, setStations, delays, setDelays})
 {
     const [currentStation, setCurrentStation] = useState([]);
-
     const [trainView, setTrainView] = useState(false);
+    const [markers, setMarkers] = useState([]);
+    const [locationMarker, setLocationMarker] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
+
+    const mapRef = useRef<MapView>(null);
+
+
 
     useEffect(() => {
         (async () => {
@@ -35,6 +38,35 @@ export default function DelayMap({stations, setStations, delays, setDelays})
             setStations(await stationModel.getStations());
         })();
     }, []);
+
+
+
+
+
+    useEffect(() => {
+        (async () => {
+            const {status} = await Location.requestForegroundPermissionsAsync();
+
+            if (status !== "granted") {
+                setErrorMessage("Permission denied.");
+                return;
+            }
+
+            const currentLocation = await Location.getCurrentPositionAsync({});
+            setLocationMarker(<Marker
+                coordinate={{
+                    latitude: currentLocation.coords.latitude, 
+                    longitude: currentLocation.coords.longitude
+                }}
+                title="Din plats"
+                pinColor="green"
+                identifier={"me"}
+                />)
+            setMarkers("Location loaded");
+        })();
+    }, []);
+
+
 
 
     function createDelayList() {
@@ -117,28 +149,36 @@ export default function DelayMap({stations, setStations, delays, setDelays})
                             <ScrollView>
                             <Text style={style.train_header}>{currentStation[1]}</Text>
                             <TrainList />
-                            <Button
-                            title='Stäng'
-                            color={"#00A438"}
+                            <Pressable style={style.button} 
                             onPress={() => {
                                 setTrainView(!trainView);
-                            }}
-                            />
+                            }}>
+                                <Text style={style.button_text}>Stäng</Text>
+                            </Pressable>
                             </ScrollView>
                         </View>
         } else {
-            // Returnerar en tom view
             trainObject = <View></View>;
-            // console.log("ej tryckt på pin");
         }
         return trainObject;
+    }
+
+    function fitToMarker() {
+        if (mapRef.current && locationMarker) {
+            console.log(locationMarker.props.coordinate.latitude);
+            console.log(locationMarker.props.coordinate.longitude);
+            const marker = locationMarker.props.coordinate;
+            const region = {latitude: marker.latitude, longitude: marker.longitude, latitudeDelta: 1.00, longitudeDelta: 1.00};
+            mapRef.current.animateToRegion(region, 3 * 1000);
+        }
     }
     
 
     return (
         <View style={style.container_map}>
             <MapView
-            key={"test"}
+            key={markers.length}
+            ref={mapRef}
             style={style.map}
             initialRegion={{
                 latitude: 62.00,
@@ -146,8 +186,11 @@ export default function DelayMap({stations, setStations, delays, setDelays})
                 latitudeDelta: 15.0,
                 longitudeDelta: 10.0,
             }}
+            onMapReady={fitToMarker}
+            onMapLoaded={fitToMarker}
             >
             {delayList}
+            {locationMarker}
             </MapView>
             <TrainView />
         </View>
@@ -180,4 +223,20 @@ const style = StyleSheet.create({
         textAlign: "center",
         padding: 10,
     },
+    button: {
+        backgroundColor: "#00A438",
+        marginTop: 20,
+        padding: 10,
+        width: 300,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        alignSelf: 'center'
+    },
+    button_text: {
+        textAlign: "center",
+        fontSize: 20,
+        color: "#FFF"
+    }
 })
