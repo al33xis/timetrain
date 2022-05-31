@@ -11,136 +11,73 @@ const Stack = createNativeStackNavigator();
 
 
 
-// Ska jag visa alla Favoritstationer och de som inte har någon försening skrivs ut för? <- smartare//snyggare? "Woho - inga förseningar!"
-// Extern funktion som summerar förseningarna per station?
-// Funktion som raderar favoriter
-
 // alexis@alexis.se
 // Alexis1!
 
 
 
-export default function FavouriteView({setIsLoggedIn, stations, delays, favouriteStation, navigation}) {
-
-
-    async function logOut() {
-        auth.logout();
-        setIsLoggedIn(false);
-    }
-
-    // Skapar en lista som jag sedan gör en map på
-    function getFavourite() {
-        const favourite_list = [];
-
-        for (let i = 0; i < delays.length; i++) {
-            const tmp_delay = delays[i].FromLocation;
-            
-            
-            if (tmp_delay !== undefined) {
-                
-                const train = delays[i].AdvertisedTrainIdent;
-                const estimated_time = delays[i].EstimatedTimeAtLocation;
-                const from_location = delays[i].FromLocation[0].LocationName;
-
-                for (let j = 0; j < favouriteStation.length; j++) {
-                    
-                    const tmp_fav = favouriteStation[j].artefact;
-
-                    if (tmp_fav === from_location) {
-
-                        favourite_list.push({acronym: tmp_fav, train: train, estimated: estimated_time})
-                    }
-                }
-            }
-        }
-
-        return favourite_list;
-    }
+export default function FavouriteView({stations, delays, favouriteStation, navigation}) {
 
     function FavouriteViewFunc() {
-        var all_trains = [];
+
+        let cur_acr;
+        let cur_station;
+        let cur_train = [];
+        let list_length;
+
 
         for (let i = 0; i < favouriteStation.length; i++) {
-            // console.log(favouriteStation[i].artefact);
-            const current_station = favouriteStation[i].artefact;
+            
+            cur_acr = favouriteStation[i].artefact;
 
-            for (let j = 0; j < delays.length; j++) {
-                if (delays[j].FromLocation !== undefined && delays[j].FromLocation[0].LocationName === current_station) {
+            for (let j = 0; j < stations.length; j++) {
+                if (stations[j].LocationSignature === cur_acr) {
+                    cur_station = stations[j].AdvertisedLocationName;
+                    cur_train.push([<Text key={j} style={style.station_header}>{cur_station}</Text>])
 
-                    const train = delays[j].AdvertisedTrainIdent;
-                    const advertised_time = delays[j].AdvertisedTimeAtLocation;
-                    const estimated_time = delays[j].EstimatedTimeAtLocation;
-
-                    all_trains.push([current_station, train, advertised_time, estimated_time]);
+                    list_length = cur_train.length;
                 }
             }
-            // lägg nedan kod här??? så returnerar den mellan varje stationsbyte??
+
+            for (let k = 0; k < delays.length; k++) {
+                if (delays[k].FromLocation !== undefined && delays[k].FromLocation[0].LocationName === cur_acr) {
+
+                    const train = delays[k].AdvertisedTrainIdent;
+                    const adv_time = delays[k].AdvertisedTimeAtLocation;
+                    const est_time = delays[k].EstimatedTimeAtLocation;
+
+                    const ad_time_split = adv_time.split('T');
+                    var ad_time = ad_time_split[1].split('.');
+                    ad_time = ad_time[0];
+                    
+                    const est_time_split = est_time.split('T');
+                    var es_time = est_time_split[1].split('.');
+                    es_time = es_time[0];
+
+                    cur_train.push([<Text key={k} style={style.train_text}>Tåg: {train}</Text>, <Text key={k+100} style={style.adv_text}>{ad_time}</Text>, <Text key={k+1000} style={style.est_text}>Ny tid: {es_time}</Text>,<Text key={k+10000} style={style.space_text}>-</Text>]);
+                }
+            }
+
+            if (list_length === cur_train.length) {
+                cur_train.push([<Text key={i} style={style.train_text}>Woho, inga förseningar!</Text>])
+            }
         }
-
-        var station_name: any;
-
-        const returnObj = all_trains.map((station, index) => {
-            const ad_time_split = station[2].split('T');
-            var ad_time = ad_time_split[1].split('.');
-            ad_time = ad_time[0];
-            
-            const est_time_split = station[3].split('T');
-            var est_time = est_time_split[1].split('.');
-            est_time = est_time[0];
-
-            const cur_station = station[0];
-            const cur_train = station[1];
-
-            for (let i = 0; i < stations.length; i++) {
-                if (stations[i].LocationSignature === cur_station) {
-                    station_name = stations[i].AdvertisedLocationName;
-                }
-            }
-
-            return <View key={index}>
-            <Text>{station_name}</Text>
-            <Text>{cur_train}</Text>
-            <Text>{ad_time}</Text>
-            <Text>{est_time}</Text>
-            </View>
-        })
-
-        return returnObj;
-
-            
-
-        // kör en map på listan och skriv ut resultatet
+        return cur_train;
     }
 
-
-    // async function deleteFavourite() {
-    //     await stationModel.deleteFavouriteStation();
-    // }
-
-
     return (
-        <View>
-            <Text>Favoriter:</Text>
-            <ScrollView style={{height: 200}}>
+        <View style={style.view}>
+            <View style={style.view_top}>
+            <ScrollView>
             <FavouriteViewFunc />
             </ScrollView>
-            <View style={{margin: 20}}>
-            <Button 
-            title="Logga ut"
-            onPress={async () => {
-                await logOut();
-            }}
-            />
             </View>
-            <View style={{margin: 20}}>
-            <Button 
-            title="Lägg till favorit"
-            onPress={async () => {
-                // await logOut();
-                // Navigera till nästa vy
+            <View style={style.view_bottom}>
+            <Pressable style={style.button} onPress={() => {
                 navigation.navigate('Lägg till favorit');
-            }}
-            />
+            }}>
+                <Text style={style.button_text}>Lägg till favorit</Text>
+            </Pressable>
             </View>
         </View>
     );
@@ -148,30 +85,57 @@ export default function FavouriteView({setIsLoggedIn, stations, delays, favourit
 
 
 const style = StyleSheet.create({
-    suggestionContainer: {
-        borderWidth: 3,
-        width: 200,
-        margin: 10
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-      },
-    centeredView: {
+    view: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-      },
+        margin: 20,
+        alignItems: 'center',
+    },
+    view_top: {
+        flex: 3,
+        alignSelf: 'stretch',
+        textAlign: 'center',
+    },
+    view_bottom: {
+        flex: 1,
+        justifyContent: 'space-around',
+    },
+    button: {
+        backgroundColor: "#00A438",
+        marginTop: 20,
+        padding: 10,
+        width: 300,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+    },
+    button_text: {
+        textAlign: "center",
+        fontSize: 20,
+        color: "#FFF"
+    },
+    station_header: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        margin: 5,
+        textDecorationLine: 'underline'
+    },
+    train_text: {
+        fontSize: 20,
+        textAlign: 'center',
+    },
+    adv_text: {
+        textAlign: 'center',
+        textDecorationLine: 'line-through',
+        color: 'red',
+    },
+    est_text: {
+        textAlign: 'center',
+        fontSize: 18,
+    },
+    space_text: {
+        textAlign: 'center',
+        marginBottom: 5,
+    }
 })
