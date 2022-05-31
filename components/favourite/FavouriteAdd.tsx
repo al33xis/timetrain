@@ -4,6 +4,8 @@ import { View, Text, Button, TextInput, Modal, ScrollView } from "react-native";
 import auth from "../../models/auth";
 import { StyleSheet } from "react-native";
 import { Pressable } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
+
 
 import stationModel from "../../models/stations";
 
@@ -58,7 +60,6 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
     async function addStation() {
         await stationModel.addFavouriteStation(selectedStation.acronym);
         setFavouriteStation(await stationModel.getFavouriteStation());
-
     }
 
 
@@ -77,7 +78,7 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
     })
 
     return (
-        <View>
+        <View style={style.view}>
             <Modal
             visible={modalVisible}
             animationType={'slide'}
@@ -103,24 +104,58 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
                     </View>
                 </View>
             </Modal>
-            <Text>Sök efter en station</Text>
+            <View style={style.view_top}>
+            <Text style={style.header}>Sök efter en station</Text>
             <TextInput 
                 onChangeText={(content: string) => {
                     showStationList(content);
                 }}
-                placeholder={"Test"}
+                placeholder={"ex. Göteborg"}
+                style={style.text_input}
             />
+            <ScrollView>
             {favouriteList}
+            </ScrollView>
+            </View>
+            <View style={style.view_bottom}>
+            <Pressable onPress={() => {
+                navigation.navigate("Mina favoriter")
+            }}>
+                <Ionicons name="arrow-back-circle-outline" color={"#000"} size={80} style={{margin: 20}}/>
+            </Pressable>
+            </View>
         </View>
     );
 };
 
 
 const style = StyleSheet.create({
+    view: {
+        flex: 1,
+        alignItems: 'center',
+    },
     suggestionContainer: {
-        borderWidth: 3,
+        borderWidth: 1,
+        borderColor: "#00A438",
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
         width: 200,
-        margin: 10
+        margin: 10,
+        padding: 10,
+        textAlign: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+    header: {
+        fontSize: 28,
+        textAlign: 'center',
+        margin: 20,
+    },
+    text_input: {
+        fontSize: 26,
+        textAlign: 'center'
     },
     modalView: {
         margin: 20,
@@ -143,4 +178,13 @@ const style = StyleSheet.create({
         alignItems: "center",
         marginTop: 22
       },
+    view_top: {
+        flex: 3,
+        alignSelf: 'stretch',
+        textAlign: 'center',
+    },
+    view_bottom: {
+        flex: 1,
+        justifyContent: 'space-around',
+    },
 })
