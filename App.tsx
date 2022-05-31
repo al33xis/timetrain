@@ -28,7 +28,7 @@ const routeIcons = {
 };
 
 // importera färger från en style-fil så att man ändrar på ett ställe!!
-// Lösning för att uppdatera kartan manuellt eller när man trycker på tab navigatorn
+
 
 export default function App() {
     // const [messages, setMessages] = useState();
