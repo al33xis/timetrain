@@ -10,6 +10,8 @@ import stationModel from "../../models/stations";
 const Stack = createNativeStackNavigator();
 
 
+// en till stack som kan ta bort ens favoriter??
+
 export default function Favourite(props) {
 
     const [favouriteStation, setFavouriteStation] = useState([]);
@@ -31,7 +33,8 @@ export default function Favourite(props) {
         headerTitleStyle: {
             fontWeight: 'bold',
         },
-        headerTitleAlign: 'center'
+        headerTitleAlign: 'center',
+        headerShown: false
         }}>
             <Stack.Screen name="Mina favoriter" options={{header: () => null}}>
                 {(screenProps) => <FavouriteView
@@ -44,7 +47,7 @@ export default function Favourite(props) {
                 favouriteStation={favouriteStation}
                 />}
             </Stack.Screen>
-            <Stack.Screen name="Lägg till favorit">
+            <Stack.Screen name="Lägg till favorit" options={{header: () => null}}>
                 {(screenProps) => <FavouriteAdd
                 {...screenProps}
                 setIsLoggedIn={props.setIsLoggedIn}
