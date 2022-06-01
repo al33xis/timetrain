@@ -1,8 +1,7 @@
-import { View, Text, TextInput, Button, Pressable, ScrollView } from "react-native";
+import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
 import { Typography, Form, Base } from "../../styles";
 import { showMessage } from "react-native-flash-message";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
 

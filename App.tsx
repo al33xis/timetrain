@@ -27,13 +27,9 @@ const routeIcons = {
   "Mina sidor": "lock-closed"
 };
 
-// importera färger från en style-fil så att man ändrar på ett ställe!!
-
 
 export default function App() {
-    // const [messages, setMessages] = useState();
     const [stations, setStations] = useState();
-    // const [codes, setCodes] = useState();
     const [delays, setDelays] = useState();
     const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
 

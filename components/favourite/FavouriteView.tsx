@@ -1,11 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useState, useEffect } from "react";
-import { View, Text, Button, TextInput, Modal, ScrollView } from "react-native";
-import auth from "../../models/auth";
-import { StyleSheet } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { Pressable } from "react-native";
 
-import stationModel from "../../models/stations";
 import { Base, Form, Typography } from "../../styles";
 
 
@@ -18,7 +15,17 @@ const Stack = createNativeStackNavigator();
 
 
 
-export default function FavouriteView({stations, delays, favouriteStation, navigation}) {
+export default function FavouriteView({stations, delays, setFavouriteStation, favouriteStation, navigation, route}) {
+
+    const [validFavourite, setValidFavourite] = useState(false);
+
+
+    useEffect(() => {
+        if (favouriteStation.length > 0) {
+            setValidFavourite(true);
+        }
+    }, [])
+
 
     function FavouriteViewFunc() {
 
@@ -26,7 +33,6 @@ export default function FavouriteView({stations, delays, favouriteStation, navig
         let cur_station;
         let cur_train = [];
         let list_length;
-
 
         for (let i = 0; i < favouriteStation.length; i++) {
             
@@ -64,6 +70,11 @@ export default function FavouriteView({stations, delays, favouriteStation, navig
                 cur_train.push([<Text key={i} style={Typography.train_text}>Woho, inga förseningar!</Text>])
             }
         }
+
+        if (favouriteStation.length === 0) {
+            cur_train.push([<Text key={"a"} style={Typography.train_header}>Du har inte valt några favoritstationer än!</Text>])
+        }
+
         return cur_train;
     }
 
@@ -75,12 +86,31 @@ export default function FavouriteView({stations, delays, favouriteStation, navig
             </ScrollView>
             </View>
             <View style={Base.view_bottom}>
+
+
             <Pressable style={Form.button} onPress={() => {
                 navigation.navigate('Lägg till favorit');
             }}>
                 <Text style={Typography.button_text}>Lägg till favorit</Text>
             </Pressable>
+
+            {validFavourite ?
+            <Pressable style={Form.button} onPress={() => {
+                navigation.navigate('Radera favorit');
+            }}>
+                <Text style={Typography.button_text}>Ta bort en favorit</Text>
+            </Pressable> :
+            <Pressable style={[Form.button, Form.button_novalid]}>
+                <Text style={Typography.button_text}>Ta bort en favorit</Text>
+            </Pressable>
+            }
+
+
+
             </View>
         </View>
     );
 };
+
+// Lägga in en blurrad knapp om jag inte har några favoriter???
+// Samma med en text som säger att du inte har några favoriter??

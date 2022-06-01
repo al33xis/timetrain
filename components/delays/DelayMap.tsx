@@ -1,14 +1,11 @@
-import { Image, Text, View, ScrollView, Modal, Button , Pressable} from 'react-native';
+import { Text, View, ScrollView, Pressable} from 'react-native';
 import { useState, useEffect, useRef } from 'react';
-import { StyleSheet } from 'react-native';
 
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
-import messageModel from "../../models/messages";
 import stationModel from "../../models/stations";
-import codeModel from "../../models/codes";
 import delayModel from "../../models/delays";
 
 import { Base, Typography, Form } from "../../styles";
@@ -116,7 +113,6 @@ export default function DelayMap({stations, setStations, delays, setDelays})
     });
 
     function TrainList() {
-        // hämta alla tåg via akronym
         const acr = currentStation[0];
         var allTrains = [];
 
@@ -165,8 +161,6 @@ export default function DelayMap({stations, setStations, delays, setDelays})
 
     function fitToMarker() {
         if (mapRef.current && locationMarker) {
-            console.log(locationMarker.props.coordinate.latitude);
-            console.log(locationMarker.props.coordinate.longitude);
             const marker = locationMarker.props.coordinate;
             const region = {latitude: marker.latitude, longitude: marker.longitude, latitudeDelta: 1.00, longitudeDelta: 1.00};
             mapRef.current.animateToRegion(region, 3 * 1000);

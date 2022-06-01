@@ -1,6 +1,4 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useState, useEffect } from 'react';
-import { Ionicons } from '@expo/vector-icons';
 
 
 import DelayMap from "./DelayMap";

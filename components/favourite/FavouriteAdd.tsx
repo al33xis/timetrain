@@ -1,9 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useState, useEffect } from "react";
-import { View, Text, Button, TextInput, Modal, ScrollView } from "react-native";
-import auth from "../../models/auth";
-import { StyleSheet } from "react-native";
-import { Pressable } from "react-native";
+import { useState} from "react";
+import { View, Text, Pressable, TextInput, Modal, ScrollView } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -14,8 +11,6 @@ const Stack = createNativeStackNavigator();
 
 
 
-// En vy som visar nuvarande favoriter och en knapp att radera dessa -> under sökfunktionen
-// Funktion som raderar favoriter
 
 // alexis@alexis.se
 // Alexis1!
@@ -61,6 +56,8 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
     async function addStation() {
         await stationModel.addFavouriteStation(selectedStation.acronym);
         setFavouriteStation(await stationModel.getFavouriteStation());
+        navigation.navigate("Mina favoriter", {reload: true});
+
     }
 
 
@@ -88,20 +85,26 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
                 <View style={Base.centered_modal}>
                     <View style={Base.modal_view}>
                         <ModalList />
-                        <Button 
-                            title='Ja'
+                        <Pressable
+                            style={Form.button}
                             onPress={() => {
                                 addStation();
                                 setModalVisible(!modalVisible);
-                                // navigera tillbaka till favoritview
+
+                                // Navigera tillbaka till favoriter?
                             }}
-                        />
-                        <Button 
-                            title='Nej'
+                        >
+                            <Text style={Typography.button_text}>Ja</Text>
+                        </Pressable>
+
+                        <Pressable
+                            style={Form.button}
                             onPress={() => {
                                 setModalVisible(!modalVisible);
                             }}
-                        />
+                        >
+                            <Text style={Typography.button_text}>Nej</Text>
+                        </Pressable>
                     </View>
                 </View>
             </Modal>

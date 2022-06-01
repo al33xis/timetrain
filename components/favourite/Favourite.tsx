@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 
 import FavouriteView from "./FavouriteView";
 import FavouriteAdd from "./FavouriteAdd";
+import FavouriteDel from "./FavouriteDel";
 
 import stationModel from "../../models/stations";
 
@@ -49,6 +50,18 @@ export default function Favourite(props) {
             </Stack.Screen>
             <Stack.Screen name="Lägg till favorit" options={{header: () => null}}>
                 {(screenProps) => <FavouriteAdd
+                {...screenProps}
+                setIsLoggedIn={props.setIsLoggedIn}
+                stations={props.stations}
+                setStations={props.setStations}
+                delays={props.delays}
+                setDelays={props.setDelays}
+                favouriteStation={favouriteStation}
+                setFavouriteStation={setFavouriteStation}
+                />}
+            </Stack.Screen>
+            <Stack.Screen name="Radera favorit" options={{header: () => null}}>
+                {(screenProps) => <FavouriteDel
                 {...screenProps}
                 setIsLoggedIn={props.setIsLoggedIn}
                 stations={props.stations}
