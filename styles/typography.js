@@ -65,3 +65,16 @@ export const space_text = {
     textAlign: 'center',
     marginBottom: 5,
 };
+
+export const space_text_del = {
+    textAlign: 'center',
+    fontSize: 20,
+    marginBottom: 5,
+    color: "#00A438"
+};
+
+export const del_text = {
+    textAlign: "center",
+    margin: 10,
+    fontSize: 20,
+}
