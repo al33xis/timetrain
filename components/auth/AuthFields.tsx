@@ -55,7 +55,7 @@ export default function AuthFields({auth, setAuth, title, submit, navigation}) {
             if (!text.match(pattern)) {
                 showMessage({
                     message: "Lösenord ej giltigt",
-                    description: "Lösenordet uppfyller inte nedan krav.",
+                    description: "Lösenordet uppfyller inte kraven.",
                     type: "warning",
                     floating: true,
                 });

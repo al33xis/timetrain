@@ -95,8 +95,6 @@ export default function DelayMap({stations, setStations, delays, setDelays})
         return delayObject;
     }
 
-    
-    
     const delayListObject = createDelayList();
     const delayList = delayListObject.map((station, index) => {
         return <Marker 

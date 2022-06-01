@@ -17,16 +17,6 @@ const Stack = createNativeStackNavigator();
 
 export default function FavouriteView({stations, delays, setFavouriteStation, favouriteStation, navigation, route}) {
 
-    const [validFavourite, setValidFavourite] = useState(false);
-
-
-    useEffect(() => {
-        if (favouriteStation.length > 0) {
-            setValidFavourite(true);
-        }
-    }, [])
-
-
     function FavouriteViewFunc() {
 
         let cur_acr;
@@ -94,7 +84,7 @@ export default function FavouriteView({stations, delays, setFavouriteStation, fa
                 <Text style={Typography.button_text}>Lägg till favorit</Text>
             </Pressable>
 
-            {validFavourite ?
+            {favouriteStation.length > 0 ?
             <Pressable style={Form.button} onPress={() => {
                 navigation.navigate('Radera favorit');
             }}>
