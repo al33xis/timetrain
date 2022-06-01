@@ -40,12 +40,19 @@ const stations = {
 
         const result = await response.json();
 
+        // console.log(result.data);
+
         return result.data;
     },
-    deleteFavouriteStation: async function deleteFavouriteStation() {
+    deleteFavouriteStation: async function deleteFavouriteStation(id: number) {
+        // behöver få in acr
+        // hämtar datan via favourite station och får ut id:t?
+        // kör nedan kod och raderar favoriten
+
+
         const token = await storage.readToken();
         var data = {
-            id: 1807,
+            id: id,
             api_key: config.api_key
         };
 
