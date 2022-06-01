@@ -1,13 +1,13 @@
 import { Image, Text, View, ScrollView } from 'react-native';
 import { StyleSheet } from "react-native";
 
-// import { Base, Typography } from "../../styles/index";
+import { Base, Typography } from "../../styles/index";
 
 export default function Home() {
 
     return (
         <ScrollView>
-            <View style={style.container}>
+            <View style={Base.container_home}>
                 <Text>
                     Välkommen till TimeTrain - din nya resekompanjon!
                 </Text>
@@ -16,12 +16,3 @@ export default function Home() {
         </ScrollView>
   );
 }
-
-const style = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-    }
-})

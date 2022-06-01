@@ -1,5 +1,5 @@
 import { View, Text, TextInput, Button, Pressable, ScrollView } from "react-native";
-// import { Typography, Forms, Base } from "../../styles";
+import { Typography, Form, Base } from "../../styles";
 import { showMessage } from "react-native-flash-message";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
@@ -77,10 +77,10 @@ export default function AuthFields({auth, setAuth, title, submit, navigation}) {
 
     return (
         <ScrollView>
-        <View style={style.container}>
-        <Text style={style.header}>{title}</Text>
+        <View style={Base.container_authfield}>
+        <Text style={Typography.header1}>{title}</Text>
 
-        <Text style={style.header2}>E-post</Text>
+        <Text style={Typography.header2}>E-post</Text>
         <TextInput
             onChangeText={(content: string) => {
                 setAuth({...auth, email: content})
@@ -93,10 +93,10 @@ export default function AuthFields({auth, setAuth, title, submit, navigation}) {
             autoCapitalize="none"
             autoCorrect={false}
             testID="email-field"
-            style={style.field}
+            style={Form.field}
             />
 
-        <Text style={style.header2}>Lösenord</Text>
+        <Text style={Typography.header2}>Lösenord</Text>
         <TextInput 
             onChangeText={(content: string) => {
                 setAuth({...auth, password: content})
@@ -109,30 +109,30 @@ export default function AuthFields({auth, setAuth, title, submit, navigation}) {
             autoCapitalize="none"
             autoCorrect={false}
             testID="password-field"
-            style={style.field}
+            style={Form.field}
             />
 
         {title == "Registrera" &&
-        <Text style={style.field_text}>Lösenordet måste innehålla: {"\n"} en stor bokstav {"\n"} en liten bokstav {"\n"} en siffra
+        <Text style={Typography.field_text}>Lösenordet måste innehålla: {"\n"} en stor bokstav {"\n"} en liten bokstav {"\n"} en siffra
         {"\n"} ett specialtecken (!.-) {"\n"} och vara minst 4 tecken långt.</Text>
         }
 
         {validEmail && validPass ?
-        <Pressable style={style.button} onPress={() => {
+        <Pressable style={Form.button} onPress={() => {
             submit();
         }}>
-            <Text style={style.button_text}>{title}</Text>
+            <Text style={Typography.button_text}>{title}</Text>
         </Pressable> :
-        <Pressable style={[style.button, style.button_novalid]}>
-            <Text style={style.button_text}>{title}</Text>
+        <Pressable style={[Form.button, Form.button_novalid]}>
+            <Text style={Typography.button_text}>{title}</Text>
         </Pressable>
         }
 
         {title == "Logga in" &&
-            <Pressable style={style.button} onPress={() => {
+            <Pressable style={Form.button} onPress={() => {
                 navigation.navigate("Register")
             }}>
-                <Text style={style.button_text}>Registrera</Text>
+                <Text style={Typography.button_text}>Registrera</Text>
             </Pressable>
         }
 
@@ -147,48 +147,3 @@ export default function AuthFields({auth, setAuth, title, submit, navigation}) {
     </ScrollView>
     );
 };
-
-const style = StyleSheet.create({
-    container: {
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-    },
-    header: {
-        fontSize: 28,
-        fontWeight: "bold",
-        marginBottom: 22,
-    },
-    header2: {
-        fontSize: 18,
-    },
-    field_text: {
-        fontSize: 12,
-        width: 180,
-    },
-    field: {
-        width: 240,
-        margin: 22,
-        padding: 8,
-        fontSize: 18,
-        backgroundColor: "#FFF"
-    },
-    button: {
-        backgroundColor: "#00A438",
-        marginTop: 20,
-        padding: 10,
-        width: 300,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-    },
-    button_text: {
-        textAlign: "center",
-        fontSize: 20,
-        color: "#FFF"
-    },
-    button_novalid: {
-        opacity: 0.5,
-    }
-})

@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 import stationModel from "../../models/stations";
+import { Base, Form, Typography } from "../../styles";
 
 const Stack = createNativeStackNavigator();
 
@@ -66,7 +67,7 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
     // Ritar ut söklistan
     const favouriteList = searchedStation.map((station, index) => {
         return (<Pressable 
-                style={style.suggestionContainer}
+                style={Form.suggestion_container}
                 key={index}
                 onPress={() => {
                     setSelectedStation(station);
@@ -78,14 +79,14 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
     })
 
     return (
-        <View style={style.view}>
+        <View style={Base.fav_view_add}>
             <Modal
             visible={modalVisible}
             animationType={'slide'}
             transparent={true}
             >
-                <View style={style.centeredView}>
-                    <View style={style.modalView}>
+                <View style={Base.centered_modal}>
+                    <View style={Base.modal_view}>
                         <ModalList />
                         <Button 
                             title='Ja'
@@ -104,20 +105,20 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
                     </View>
                 </View>
             </Modal>
-            <View style={style.view_top}>
-            <Text style={style.header}>Sök efter en station</Text>
+            <View style={Base.view_top}>
+            <Text style={Typography.header_fav_add}>Sök efter en station</Text>
             <TextInput 
                 onChangeText={(content: string) => {
                     showStationList(content);
                 }}
                 placeholder={"ex. Göteborg"}
-                style={style.text_input}
+                style={Typography.text_input}
             />
             <ScrollView>
             {favouriteList}
             </ScrollView>
             </View>
-            <View style={style.view_bottom}>
+            <View style={Base.view_bottom}>
             <Pressable onPress={() => {
                 navigation.navigate("Mina favoriter")
             }}>
@@ -127,64 +128,3 @@ export default function FavouriteAdd({stations, delays, favouriteStation, setFav
         </View>
     );
 };
-
-
-const style = StyleSheet.create({
-    view: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    suggestionContainer: {
-        borderWidth: 1,
-        borderColor: "#00A438",
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        width: 200,
-        margin: 10,
-        padding: 10,
-        textAlign: 'center',
-        alignItems: 'center',
-        alignSelf: 'center',
-    },
-    header: {
-        fontSize: 28,
-        textAlign: 'center',
-        margin: 20,
-    },
-    text_input: {
-        fontSize: 26,
-        textAlign: 'center'
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-      },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-      },
-    view_top: {
-        flex: 3,
-        alignSelf: 'stretch',
-        textAlign: 'center',
-    },
-    view_bottom: {
-        flex: 1,
-        justifyContent: 'space-around',
-    },
-})

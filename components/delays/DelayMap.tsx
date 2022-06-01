@@ -11,7 +11,7 @@ import stationModel from "../../models/stations";
 import codeModel from "../../models/codes";
 import delayModel from "../../models/delays";
 
-// import { Base, Typography } from "../../styles/index";
+import { Base, Typography, Form } from "../../styles";
 
 
 
@@ -132,7 +132,7 @@ export default function DelayMap({stations, setStations, delays, setDelays})
             var time = split_date[1].split('.');
             time = time[0];
 
-            return <Text key={index} style={style.train_text}>
+            return <Text key={index} style={Typography.train_text}>
                     Tåg {station[0]} - ny avgångstid {time}.
                     </Text>
         })
@@ -145,15 +145,15 @@ export default function DelayMap({stations, setStations, delays, setDelays})
 
         if (trainView) {
 
-            trainObject = <View style={style.train_view}>
+            trainObject = <View style={Base.train_view}>
                             <ScrollView>
-                            <Text style={style.train_header}>{currentStation[1]}</Text>
+                            <Text style={Typography.train_header}>{currentStation[1]}</Text>
                             <TrainList />
-                            <Pressable style={style.button} 
+                            <Pressable style={Form.button} 
                             onPress={() => {
                                 setTrainView(!trainView);
                             }}>
-                                <Text style={style.button_text}>Stäng</Text>
+                                <Text style={Typography.button_text}>Stäng</Text>
                             </Pressable>
                             </ScrollView>
                         </View>
@@ -175,11 +175,11 @@ export default function DelayMap({stations, setStations, delays, setDelays})
     
 
     return (
-        <View style={style.container_map}>
+        <View style={Base.container_map}>
             <MapView
             key={markers.length}
             ref={mapRef}
-            style={style.map}
+            style={Base.map}
             initialRegion={{
                 latitude: 62.00,
                 longitude: 15.00,
@@ -196,47 +196,3 @@ export default function DelayMap({stations, setStations, delays, setDelays})
         </View>
   );
 }
-
-
-
-const style = StyleSheet.create({
-    map: {
-        flex: 1,
-        width: "100%",
-    },
-    container_map: {
-        flex: 1,
-        justifyContent: "flex-end",
-    },
-    train_view: {
-        height: 300,
-        backgroundColor: "#F4F4ED",
-        margin: 10,
-    },
-    train_header: {
-        textAlign: "center",
-        fontWeight: "bold",
-        fontSize: 25,
-        marginBottom: 10,
-    },
-    train_text: {
-        textAlign: "center",
-        padding: 10,
-    },
-    button: {
-        backgroundColor: "#00A438",
-        marginTop: 20,
-        padding: 10,
-        width: 300,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        alignSelf: 'center'
-    },
-    button_text: {
-        textAlign: "center",
-        fontSize: 20,
-        color: "#FFF"
-    }
-})
